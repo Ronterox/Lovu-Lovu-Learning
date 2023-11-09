@@ -1,0 +1,104 @@
+define e = Character("Eileen")
+define povname = "developer"
+
+label start:
+    $ soundQueueCount = 0
+
+    "Warning: this game will be pretty fun!"
+
+    scene bg room:
+        zoom 2
+
+    "Today is a good day"
+
+    "Tommorrow is a good day"
+
+    "Holy shit, I'm gonna die"
+
+    $ gameOver = False
+
+    while not gameOver:
+        play sound "audio/heh.ogg"
+
+        show eileen talk with ease:
+            xalign 0.5
+            yalign 0
+
+        e "Hello again [povname]!"
+
+        show eileen happy with ease:
+            xalign 0.5
+            yalign 0.5
+
+        speak e "How are you doing?"
+
+        call menu_test
+
+    return
+
+label end:
+    speak e "Goodbye [povname]!"
+    return
+
+label input_test:
+    python:
+         povname = renpy.input("What's your name??", length=32)
+         povname = povname.strip()
+
+         if not povname:
+             povname = "dude"
+             renpy.say(e, "I guess I will just call you [povname]")
+
+    speak e "Nice to meet you [povname]!"
+    return
+
+label menu_test:
+    play sound "audio/talk3.ogg"
+    menu:
+        e "What are we testing today [povname]?"
+
+        "Let's test some input!":
+            jump input_test
+
+        "Teach me some things!":
+            jump wikipedia
+
+        "Nothing!":
+            $ gameOver = True
+            jump end
+    return
+
+label wikipedia:
+    python:
+         statement = renpy.input("What do you wanna know?", length=32)
+         statement = statement.strip()
+
+         wikiResults = "Nothing huh...?"
+
+         if statement:
+            import requests
+
+            response = requests.get(
+                'https://en.wikipedia.org/w/api.php',
+                params={
+                    'action': 'query',
+                    'format': 'json',
+                    'titles': statement,
+                    'prop': 'extracts',
+                    'exintro': True,
+                    'explaintext': True
+                }
+            ).json()
+
+            page = next(iter(response['query']['pages'].values()))
+
+            try:
+                wikiResults = page['extract']
+            except Exception as error:
+                print(error)
+            finally:
+                del response
+                del page
+
+    speak e "[wikiResults]"
+    return

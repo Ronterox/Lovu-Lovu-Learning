@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/script.rpy", line 59: Line is followed by a block, despite not being a menu choice. Did you forget a colon at the end of the line?
+    "Stop asking me questions!"
+                               ^
+
+Ren'Py Version: Ren'Py 7.4.10.2178
+Wed Jul 27 19:10:19 2022
