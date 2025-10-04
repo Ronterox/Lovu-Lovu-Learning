@@ -1,7 +1,7 @@
 init python:
     def search_wiki(statement, defaultText):
         statement = statement.strip()
-        
+
         global wikiResults
 
         wikiResults = defaultText
@@ -92,9 +92,30 @@ label menu_test:
         "Let's play the old demo!":
             jump old_demo
 
+        "Text generation!":
+            jump text_generation
+
         "Nothing!":
             $ gameOver = True
             jump end_test
+    return
+
+label text_generation:
+    $ i = 0
+    label gameloop:
+        python:
+            import subprocess
+            text = subprocess.check_output(['/home/rontero/.bun/bin/bun', '/home/rontero/Documents/Projects/JavascriptProjects/HistoryGenerator/index.ts'], text=True)
+
+        $ speak_eileen()
+        e "[text]"
+
+        $ i += 1
+        if i < 5:
+            jump gameloop
+
+    $ speak_eileen()
+    e "That's all for now!"
     return
 
 label data_test:
